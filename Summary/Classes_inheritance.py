@@ -78,3 +78,41 @@ house.get_info()
 shop = Building(2020, 'NJ')
 shop.get_info()
 
+#Создание обьекта на лету - setattr()
+class Goods:
+    title = "Мороженое"
+    weight = 154
+    tp = "Еда"
+    price = 1024
+
+
+Goods.price = 2048 #присваиваем новое значение
+setattr(Goods, 'inflation', 100)
+
+class Car:
+    pass
+
+setattr(Car, 'model', "Тойота")
+setattr(Car, 'color', "Розовый")
+setattr(Car, 'number', "П111УУ77")
+
+print(Car.__dict__["color"])
+
+#Функция getattr() возвращает значение атрибута указанного объекта object по его имени name.
+class Notes:
+    uid = 1005435
+    title = "Шутка"
+    author = "И.С. Бах"
+    pages = 2
+
+print(getattr(Notes, 'author'))
+
+
+class Dictionary:
+    rus = "Питон"
+    eng = "Python"
+
+
+print(getattr(Dictionary, 'rus_word', False))
+
+
