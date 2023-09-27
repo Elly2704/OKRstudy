@@ -1,5 +1,5 @@
 #Создание класа и обьекта
-class cat:
+class Cat:
     name = None
     age = None
     isHappy = None
@@ -12,17 +12,17 @@ class cat:
         print(self.name, self.age, self.isHappy)
 
 
-cat1 = cat()
+cat1 = Cat()
 cat1.name = 'Rasty'
 cat1.age = 5
 cat1.isHappy = True
 
-cat2 = cat()
+cat2 = Cat()
 cat2.name = 'Black'
 cat2.age = 3
 cat2.isHappy = False
 
-cat3 = cat()
+cat3 = Cat()
 cat3.set_data('Nikky', 8, True)
 
 print(cat1.name)
@@ -33,7 +33,7 @@ cat1.get_data()
 cat3.get_data()
 
 #Конструкторы
-class cat:
+class Cat:
     name = None
     age = None
     isHappy = None
@@ -47,7 +47,7 @@ class cat:
         print(self.name, self.age, self.isHappy)
 
 
-cat3 = cat('Nikky', 8, True)
+cat3 = Cat('Nikky', 8, True)
 cat3.get_data()
 
 #Наследование, инкапсуляция, полиморфизм
@@ -71,7 +71,7 @@ class School(Building):
     def get_info(self):
         print(self.year, self.city, self.person)
 
-school = School(1995, 'NY', 300)
+school = School(199, 2000,'NY')
 school.get_info()
 house = Building(2000, 'LA')
 house.get_info()
