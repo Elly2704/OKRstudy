@@ -1,0 +1,810 @@
+{
+	"info": {
+		"_postman_id": "fb81d12d-c168-4882-b7de-5a6ceb729e65",
+		"name": "Beloved",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17099328",
+		"_collection_link": "https://speeding-firefly-738311.postman.co/workspace/Beloved~84804dd0-4c5a-4979-81bc-fa8a6927b4f3/collection/17099328-fb81d12d-c168-4882-b7de-5a6ceb729e65?action=share&source=collection_link&creator=17099328"
+	},
+	"item": [
+		{
+			"name": "API0000",
+			"item": [
+				{
+					"name": "Create an Account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+									"});",
+									"pm.test(\"Response is valid and has a body\", function () {",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();",
+									"});",
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"const responseJson = pm.response.json();",
+									"pm.test(\"First name is string\", function () {",
+									"    pm.expect(responseJson.first_name).to.be.a('string');",
+									"});",
+									"pm.test(\"Last name is string\", function () {    ",
+									"    pm.expect(responseJson.last_name).to.be.a('string');",
+									"});",
+									"pm.test(\"Username is string\", function () {    ",
+									"    pm.expect(responseJson.username).to.be.a('string');",
+									"});",
+									"pm.test(\"Account was created, verification link was sent\", function () {    ",
+									"    pm.expect(responseJson.msg).to.eql('Account was created and verification link was sent to provided email. Email verification link will be expired during 30 minutes');",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"username\": \"{{$randomEmail}}\",\r\n\"password\": \"{{$randomPassword}}\",\r\n\"first_name\":\t\"{{$randomFirstName}}\",\r\n\"last_name\":\t\"{{$randomLastName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/entry/user/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login (access token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonObject = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"token\", jsonObject.access_token);\r",
+									"\r",
+									"\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Login is successful\", function () {\r",
+									"\tpm.expect(responseJson.login).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{EllyTest}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{EllyTestPSW}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "cU44KSpHXjbziiwsLavJXhEXuLDdX2Rkfim27CvS",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "6D5DcxzLwzgp4m6umidhAKdNztaGKyXnYXQXLzDVpKlY0byg3ON2NQOTsPmlWe29YJVZIrh6unZJyIlZcmuzdrIIGkSfZlzZNUExiziwDbMN63uyQig6IsSJydrKPdHE",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/auth/token/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get list options during Sign up process",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 1500ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/utils/options/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"utils",
+								"options",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Organization during Sign Up process",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"var jsonObject = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"orgID\", jsonObject.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"{{$randomCompanyName}}\",\r\n  \"website\": \"www.org\",\r\n  \"type\": 1,\r\n  \"parent_org_id\": 1981,\r\n  \"division\": \"string\",\r\n  \"address\": {\r\n    \"country\": \"string\",\r\n    \"state\": \"string\",\r\n    \"city\": \"string\",\r\n    \"address\": \"string\",\r\n    \"postal\": \"string\",\r\n    \"suite\": \"string\",\r\n    \"place_id\": \"string\",\r\n    \"street\": \"string\",\r\n    \"full_address\": \"string\"\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/entry/organizations/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"organizations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request to Join will be created by requested user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Login is true\", function () {    \r",
+									"    pm.expect(responseJson.login).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"division\": \"string\",\r\n  \"name\": \"string\",\r\n  \"email\": \"{{orgUserEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/entry/organizations/join/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"organizations",
+								"join",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user details",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var id = pm.environment.get(\"userID\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Login is true\", function () {    \r",
+									"    pm.expect(responseJson.login).to.eql(true);\r",
+									"});\r",
+									"pm.test(\"User ID is correct\", function () {    \r",
+									"    pm.expect(responseJson.user.id).to.eql(1009);\r",
+									"\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{url}}/entry/user/details/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"user",
+								"details",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Canceling waiting and creating a new join request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Login is successful\", function () {\r",
+									"\tpm.expect(responseJson.login).to.eql(true);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/entry/organizations/join_decline/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"organizations",
+								"join_decline",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request to Associate Organization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Success msg\", function () {    \r",
+									"    pm.expect(responseJson.msg).to.eql(\"Request was sent to the provided organization Project manager\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Miu\",\r\n  \"email\": \"reverie2704+pmewp@gmail.com\",\r\n  \"resend\": true,\r\n  \"org_id\": \"{{orgID}}\",\r\n  \"skip\": false,\r\n  \"is_parent\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/entry/organizations/associate/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"organizations",
+								"associate",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user Profile during Sign Up process",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Login is true\", function () {    \r",
+									"    pm.expect(responseJson.login).to.eql(true);\r",
+									"});\r",
+									"pm.test(\"User ID is correct\", function () {    \r",
+									"    pm.expect(responseJson.user.id).to.eql(1009);\r",
+									"\r",
+									"});\r",
+									"pm.test(\"User email is correct\", function () {    \r",
+									"    pm.expect(responseJson.email).to.eql(pm.environment.get(\"EllyTest\"));\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"user_type\":0,\"role\":{\"title\":\"1\",\"division\":\"1\",\"phone_number\":\"+22111111111\"},\"language\":\"en\",\"gender\":[1],\"pronouns_id\":1,\"race\":[1],\"ethnicity\":[2],\"education\":1,\"office_type\":\"1\",\"office_address\":{\"country\":\"US\",\"state\":\"New York\",\"city\":\"New York\",\"postal\":\"10011\",\"address\":\"125 West 18th Street\",\"suite\":\"\",\"office_type\":\"\",\"lat\":40.7406703,\"lng\":-73.9959828,\"number\":\"125\",\"street\":\"West 18th Street\",\"place_id\":\"ChIJNdKfxrxZwokRl8aAJOKH60k\",\"full_address\":\"125 W 18th St, New York, NY 10011, USA\"},\"phone_number\":\"+11111111111\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/entry/profile/{{userID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"profile",
+								"{{userID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password: Create reset password link",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Success msg\", function () {    \r",
+									"    pm.expect(responseJson.result.msg).to.eql(\"Please, check your email to change your password.\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"{{EllyTest}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/entry/forgot_password/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"forgot_password",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization Profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"User ID is correct\", function () {    \r",
+									"    pm.expect(responseJson.id).to.eql(pm.environment.get(\"orgID\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/organizations/profile/{{orgID}}/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"organizations",
+								"profile",
+								"{{orgID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user Profile during Sign Up process",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"pm.test(\"Login is true\", function () {    \r",
+									"    pm.expect(responseJson.login).to.eql(true);\r",
+									"});\r",
+									"pm.test(\"User ID is correct\", function () {    \r",
+									"    pm.expect(responseJson.user.id).to.eql(1009);\r",
+									"\r",
+									"});\r",
+									"pm.test(\"User email is correct\", function () {    \r",
+									"    pm.expect(responseJson.email).to.eql(pm.environment.get(\"EllyTest\"));\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\"first_name\":\"{{orgUserFirstName}}\",\"email\":\"reverie2704+put@gmail.com\",\"last_name\":\"{{orgUserLastName}}\",\"secondary_email\":null,\"language\":\"en\",\"office_type\":1,\"office_address\":{\"lat\":40.7406703,\"lng\":-73.9959828,\"city\":\"New York\",\"state\":\"New York\",\"suite\":\"\",\"number\":\"125\",\"postal\":\"10011\",\"street\":\"West 18th Street\",\"address\":\"125 West 18th Street\",\"country\":\"US\",\"place_id\":\"ChIJNdKfxrxZwokRl8aAJOKH60k\",\"office_type\":\"\",\"full_address\":\"125 W 18th St, New York, NY 10011, USA\"},\"gender\":[1],\"pronouns_id\":1,\"race\":[1],\"ethnicity\":[3],\"education\":1,\"role\":{\"title\":\"1\",\"division\":\"1\",\"phone_number\":\"+11111111111\"},\"avatar_id\":null,\"phone_number\":\"+11111111111\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/entry/profile/{{userID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"profile",
+								"{{userID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);\r",
+									"});\r",
+									"pm.test(\"Response is valid and has a body\", function () {\r",
+									"    pm.response.to.be.json;pm.response.to.have.jsonBody();\r",
+									"});\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"User ID is correct\", function () {    \r",
+									"    pm.expect(responseJson.user_id).to.eql(1009);\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/entry/profile/{{userID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"entry",
+								"profile",
+								"{{userID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Sign in/Sign up"
+		}
+	]
+}
