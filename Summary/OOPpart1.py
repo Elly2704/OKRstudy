@@ -370,7 +370,7 @@ print(p.__dict__)
 
 # с использованием дескриптора
 
-|class Integer:
+class Integer:
     @classmethod
     def verify_coord(cls, coord):
         if type(coord) != int:
@@ -380,7 +380,7 @@ print(p.__dict__)
         self.name = "_" + name
 
     def __get__(self, instance, owner):
-        return instance.__dict__[self.name #(getattr(instance, self.name))
+        return instance.__dict__[self.name] #(getattr(instance, self.name))
 
     def __set__(self, instance, value):
         self.verify_coord(value)
