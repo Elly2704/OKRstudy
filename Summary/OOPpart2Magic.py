@@ -190,12 +190,12 @@ class FRange2D:
         self.rows = rows
 
     def __iter__(self):
-        self.value_row = 0
+        self.value = 0
         return self
 
     def __next__(self):
-        if self.value_row < self.rows:
-            self.value_row += 1
+        if self.value < self.rows:
+            self.value += 1
             return iter(self.fr)
         else:
             raise StopIteration
